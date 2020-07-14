@@ -11,8 +11,8 @@ def build_fc(in_features, out_features, activation='relu'):
         raise NotImplementedError("Not implemented.")
     return nn.Sequential(fc, activ)
 
-def get_conv(in_channels, out_channels, kernel_size, activation='relu', batch_norm=False, norm_first=False):
-    conv = nn.Conv2d(in_channels, out_channels, kernel_size, padding=kernel_size//2)
+def build_conv(in_channels, out_channels, kernel_size, stride=1, activation='relu', batch_norm=False, norm_first=False):
+    conv = nn.Conv2d(in_channels, out_channels, kernel_size, padding=kernel_size//2, stride=stride)
     if activation == 'relu':
         activ = nn.ReLU()
     elif activation == 'none':
@@ -26,7 +26,7 @@ def get_conv(in_channels, out_channels, kernel_size, activation='relu', batch_no
             return nn.Sequential(norm, activ, conv)
         else:
             norm = nn.BatchNorm2d(out_channels)
-            return nn.Sequential(conv, activ, norm)
+            return nn.Sequential(conv, norm, activ)
 
     return nn.Sequential(conv, activ)
 
