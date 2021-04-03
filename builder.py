@@ -1,24 +1,23 @@
 import torch
 import torch.nn as nn
 
+def get_activation(name):
+    activations = {
+        'none': nn.Identity(),
+        'relu': nn.ReLU(),
+        'silu': nn.SiLU(),
+        'leaky_relu': nn.LeakyReLU(),
+    }
+    return activations[name]
+
 def build_fc(in_features, out_features, activation='relu'):
     fc = nn.Linear(in_features, out_features)
-    if activation == 'relu':
-        activ = nn.ReLU()
-    elif activation == 'none':
-        activ = nn.Identity()
-    else:
-        raise NotImplementedError("Not implemented.")
+    activ = get_activation(activation)
     return nn.Sequential(fc, activ)
 
 def build_conv(in_channels, out_channels, kernel_size, stride=1, activation='relu', batch_norm=False, norm_first=False):
     conv = nn.Conv2d(in_channels, out_channels, kernel_size, padding=kernel_size//2, stride=stride)
-    if activation == 'relu':
-        activ = nn.ReLU()
-    elif activation == 'none':
-        activ = nn.Identity()
-    else:
-        raise NotImplementedError("Not implemented.")
+    activ = get_activation(activation)
 
     if batch_norm:
         if norm_first:
