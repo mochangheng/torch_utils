@@ -10,22 +10,23 @@ def get_activation(name):
     }
     return activations[name]
 
-def build_fc(in_features, out_features, activation='none'):
+def build_fc(in_features, out_features, batch_norm=False, activation='none'):
     fc = nn.Linear(in_features, out_features)
     activ = get_activation(activation)
+
+    if batch_norm:
+        norm = nn.BatchNorm1d(in_features)
+        return nn.Sequential(norm, fc, activ)
+
     return nn.Sequential(fc, activ)
 
-def build_conv(in_channels, out_channels, kernel_size, stride=1, activation='none', batch_norm=False, norm_first=False):
+def build_conv(in_channels, out_channels, kernel_size, stride=1, activation='none', batch_norm=False):
     conv = nn.Conv2d(in_channels, out_channels, kernel_size, padding=kernel_size//2, stride=stride)
     activ = get_activation(activation)
 
     if batch_norm:
-        if norm_first:
-            norm = nn.BatchNorm2d(in_channels)
-            return nn.Sequential(norm, activ, conv)
-        else:
-            norm = nn.BatchNorm2d(out_channels)
-            return nn.Sequential(conv, norm, activ)
+        norm = nn.BatchNorm2d(in_channels)
+        return nn.Sequential(norm, activ, conv)
 
     return nn.Sequential(conv, activ)
 
