@@ -10,12 +10,12 @@ def get_activation(name):
     }
     return activations[name]
 
-def build_fc(in_features, out_features, activation='relu'):
+def build_fc(in_features, out_features, activation='none'):
     fc = nn.Linear(in_features, out_features)
     activ = get_activation(activation)
     return nn.Sequential(fc, activ)
 
-def build_conv(in_channels, out_channels, kernel_size, stride=1, activation='relu', batch_norm=False, norm_first=False):
+def build_conv(in_channels, out_channels, kernel_size, stride=1, activation='none', batch_norm=False, norm_first=False):
     conv = nn.Conv2d(in_channels, out_channels, kernel_size, padding=kernel_size//2, stride=stride)
     activ = get_activation(activation)
 
